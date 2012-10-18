@@ -1,6 +1,6 @@
 = data_doc
 
-* http://github.com/#{github_username}/#{project_name}
+* http://github.com/alilee/data_doc
 
 == DESCRIPTION:
 
