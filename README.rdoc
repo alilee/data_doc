@@ -6,29 +6,41 @@
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Complex documents can be challenging to author, and time-consuming to get 
+high levels of internal consistency. This gem offers a Domain Specific Language 
+to embed structured data in a markdown document and then render it into 
+configurable tables. 
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Main document is Markdown for convenient content authoring.
+* Builds up data in relational database, facilitating review and 
+  analysis.
+* Generates HTML from Markdown.
+* Provides fine-grained control over the HTML headers, including 
+  CSS, for the output.
+* Simple DSL for capturing structured data
+* Simple DSL for querying data stores and laying out in tables.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  data_doc your_file.md.erb > result.html
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Tested on Ruby 1.9.3 only (so far)
+* ActiveRecord-compatible data store
+* RDiscount for Markdown
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+  gem install data_doc
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2012 FIXME full name
+Copyright (c) 2012 Alister Lee
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
