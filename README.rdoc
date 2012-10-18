@@ -6,7 +6,7 @@
 
 == DESCRIPTION:
 
-Complex documents can be challenging to author, and time-consuming to get 
+Complex documents can be challenging to author, and time-consuming to achieve 
 high levels of internal consistency. This gem offers a Domain Specific Language 
 to embed structured data in a markdown document and then render it into 
 configurable tables. 
@@ -25,6 +25,19 @@ configurable tables.
 == SYNOPSIS:
 
   data_doc your_file.md.erb > result.html
+  
+The data definition language looks like this:
+
+  store 'requirement' do
+    string 'name'
+    text 'description'
+    string 'priority'
+    alternate_key 'name'    
+  end
+  
+  requirement name: "It MUST "
+  
+The 
 
 == REQUIREMENTS:
 
