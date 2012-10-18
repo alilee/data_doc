@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     hoe (3.1.0)
       rake (~> 0.8)
