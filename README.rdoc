@@ -32,6 +32,8 @@ configurable tables.
   
 The data definition language looks like this:
 
+  connection adapter: sqlite3 filename: '/tmp/example.db'
+  
   store 'priority' do
     string 'name'
     alternate_key 'name'
@@ -53,13 +55,13 @@ The data definition language looks like this:
   
 The table presentation language looks like this:
 
-  present 'select * from priority'
+  present 'select * from priority' #=> '<table>...</table>'
   
   present requirement.project('priority', 'name') do
     caption 'Table of requirements by priority'
     column_order 'name', 'priority'
     label 'priority, 'Importance'
-  end
+  end                              #=> '<table>...</table>'
 
 == REQUIREMENTS:
 
