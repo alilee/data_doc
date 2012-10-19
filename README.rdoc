@@ -4,6 +4,8 @@
 
 {<img src="https://secure.travis-ci.org/alilee/data_doc.png" alt="Build Status" />}[http://travis-ci.org/alilee/data_doc]
 
+NOTE: THIS GEM DOES NOTHING YET.
+
 == DESCRIPTION:
 
 Complex documents can be challenging to author, and time-consuming to achieve 
@@ -19,8 +21,10 @@ configurable tables.
 * Generates HTML from Markdown.
 * Provides fine-grained control over the HTML headers, including 
   CSS, for the output.
-* Simple DSL for capturing structured data
+* Simple DSL for capturing structured data.
 * Simple DSL for querying data stores and laying out in tables.
+* Command line interface
+* Simple web-page interface using sinatra
 
 == SYNOPSIS:
 
@@ -28,16 +32,34 @@ configurable tables.
   
 The data definition language looks like this:
 
+  store 'priority' do
+    string 'name'
+    alternate_key 'name'
+  end
+  
+  priority name: 'high'
+  priority name: 'medium'
+  priority name: 'low'
+
   store 'requirement' do
     string 'name'
     text 'description'
-    string 'priority'
+    ref 'priority', in: 'priority'
     alternate_key 'name'    
   end
   
-  requirement name: "It MUST "
+  requirement name: "It MUST be fast", description: "It must return within 5s.", priority: 'high'
+  requirement name: "It MUST look good", description: "It must be blue in colour.", priority: 'medium'
   
-The 
+The table presentation language looks like this:
+
+  present 'select * from priority'
+  
+  present requirement.project('priority', 'name') do
+    caption 'Table of requirements by priority'
+    column_order 'name', 'priority'
+    label 'priority, 'Importance'
+  end
 
 == REQUIREMENTS:
 
