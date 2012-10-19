@@ -4,26 +4,21 @@ module DataDoc
   class CLI
     def self.execute(stdout, arguments=[])
 
-      # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.
-
       options = {
         :path     => '~'
       }
       mandatory_options = %w(  )
 
-      parser = OptionParser.new do |opts|
+      OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^          /,'')
-          This application is wonderful because...
+          Processes structured data embedded in a markdown document and 
+          then renders it into configurable tables.
 
           Usage: #{File.basename($0)} [options]
 
           Options are:
         BANNER
         opts.separator ""
-        opts.on("-p", "--path PATH", String,
-                "This is a sample message.",
-                "For multiple lines, add more strings.",
-                "Default: ~") { |arg| options[:path] = arg }
         opts.on("-h", "--help",
                 "Show this help message.") { stdout.puts opts; exit }
         opts.parse!(arguments)

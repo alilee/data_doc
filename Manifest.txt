@@ -6,9 +6,15 @@ Rakefile
 bin/data_doc
 lib/data_doc.rb
 lib/data_doc/cli.rb
+lib/data_doc/document.rb
+lib/data_doc/store.rb
+lib/data_doc/present.rb
 script/console
 script/destroy
 script/generate
 test/test_data_doc.rb
+test/test_data_doc_document.rb
+test/test_data_doc_store.rb
+test/test_data_doc_present.rb
 test/test_data_doc_cli.rb
 test/test_helper.rb

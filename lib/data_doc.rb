@@ -4,3 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 module DataDoc
   VERSION = '0.0.2'
 end
+
+require 'data_doc/document.rb'
+# require 'data_doc/store.rb'
+# require 'data_doc/table.rb'
