@@ -1,14 +1,16 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
-require 'data_doc/cli'
+require_relative 'test_helper.rb'
+require_relative '../lib/data_doc/cli'
 
-class TestDataDocCli < Test::Unit::TestCase
-  def setup
-    DataDoc::CLI.execute(@stdout_io = StringIO.new, [])
+describe DataDoc::CLI do
+       
+  def execute_cli(*args) 
+    DataDoc::CLI.execute(@stdout_io = StringIO.new, args)
     @stdout_io.rewind
-    @stdout = @stdout_io.read
+    @stdout_io.read.chomp
   end
   
-  def test_print_default_output
-    assert_match(/To update this executable/, @stdout)
+  it "should present version" do
+    execute_cli('--version').must_match DataDoc::VERSION
   end
+  
 end
