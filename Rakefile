@@ -11,7 +11,7 @@ Hoe.plugin :newgem
 $hoe = Hoe.spec 'data_doc' do
   self.developer        'Alister Lee', 'gems@shortepic.com'
   self.rubyforge_name = 'data-doc'
-  self.extra_deps =     [['activerecord','~= 3.2.8'],['rdiscount','~= 1.6.8']]
+  self.extra_deps =     [['activerecord','~> 3.2.8'],['rdiscount','~> 1.6.8']]
 end
 
 require 'newgem/tasks'
