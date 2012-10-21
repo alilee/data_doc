@@ -58,7 +58,7 @@ your level of risk.
   
 The data definition language looks like this:
 
-  connection adapter: sqlite3 database: '/tmp/example.db'
+  connection adapter: sqlite3 database: '/tmp/example.db' #=>
   
   store 'priority' do
     string 'name'
