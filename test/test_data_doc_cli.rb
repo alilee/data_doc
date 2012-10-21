@@ -1,6 +1,7 @@
 require_relative 'test_helper.rb'
 require_relative '../lib/data_doc/cli'
 require 'tempfile'
+require 'set'
 
 describe DataDoc::CLI do
      
@@ -93,7 +94,7 @@ YAML
         proc { execute_cli("--output") }.must_raise OptionParser::MissingArgument
       end
 
-      it "should accept a format option" do
+      it "should accept an html format option" do
         execute_cli("--format", 'html', @filename)
       end
 

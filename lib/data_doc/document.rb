@@ -1,3 +1,5 @@
+require 'rdiscount'
+
 module DataDoc
 
   class Document
@@ -18,8 +20,10 @@ module DataDoc
     def connection=(connection)
     end
     
-    def generate(content)
-      @output.write ""
+    def generate(content_io)
+      content = content_io.read
+      html = RDiscount.new(content).to_html
+      @output.write(html)
     end
     
   end
