@@ -25,7 +25,7 @@ module DataDoc
           begin
             doc.connection = YAML.load(File.read(filename))
           rescue Exception => e
-            STDERR.puts "ERROR with connection file (#{e.message})"
+            stdout.puts "ERROR with connection file (#{e.message})"
             return 1
           end
         end
@@ -43,7 +43,7 @@ module DataDoc
           begin
             doc.output = File.open(filename, 'w+')
           rescue Exception => e
-            STDERR.puts "ERROR with output file (#{e.message})"
+            stdout.puts "ERROR with output file (#{e.message})"
             return 1
           end
         end
@@ -73,7 +73,7 @@ module DataDoc
         opts.parse!(arguments)
         
         if arguments.length != 1 
-          STDERR.puts opts
+          stdout.puts "ERROR missing input file"
           return 1
         end
                 
@@ -82,7 +82,7 @@ module DataDoc
       begin
         content = File.open(arguments.first, "r")
       rescue Exception => e
-        STDERR.puts "ERROR opening content file (#{e.message})"
+        stdout.puts "ERROR opening content file (#{e.message})"
         return 1
       end
             
