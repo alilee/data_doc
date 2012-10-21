@@ -13,6 +13,8 @@ high levels of internal consistency. This gem offers a Domain Specific Language
 to embed structured data in a markdown document and then render it into 
 configurable tables. 
 
+Note: See security implications below.
+
 == FEATURES/PROBLEMS:
 
 * Main document is Markdown for convenient content authoring.
@@ -25,6 +27,12 @@ configurable tables.
 * Simple DSL for querying data stores and laying out in tables.
 * Command line interface
 * Simple web-page interface using sinatra
+
+== SECURITY IMPLICATIONS:
+
+This gem uses ERB to process arbitrary ruby code provided by a user. 
+Some sandboxing ($SAFE) is used, but you should assess and manage 
+your level of risk.
 
 == SYNOPSIS:
 

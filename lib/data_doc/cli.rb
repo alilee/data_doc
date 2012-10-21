@@ -7,6 +7,7 @@ module DataDoc
     def self.execute(stdout, arguments=[])
 
       doc = DataDoc::Document.new
+      doc.output = stdout
 
       OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^          /,'')
@@ -62,12 +63,12 @@ module DataDoc
 
         opts.on_tail("-h", "--help", "Show this message") do
           stdout.puts opts
-          return
+          return 0
         end
 
         opts.on_tail("--version", "Show version") do
           stdout.puts DataDoc::VERSION
-          return
+          return 0
         end        
         
         opts.parse!(arguments)

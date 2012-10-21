@@ -4,24 +4,7 @@ require 'tempfile'
 require 'set'
 
 describe DataDoc::CLI do
-     
-  before do
-    @temp_files = Set.new
-  end
-  
-  def temp_file(content)
-    f = Tempfile.new('test_data_doc_cli') do |io|
-      io.write(content)
-    end
-    @temp_files.add(f)
-    f.path
-  end
-  
-  after do
-    @temp_files.each { |f| f.unlink }
-    @temp_files.clear
-  end  
-    
+         
   def execute_cli(*args) 
     DataDoc::CLI.execute(stdout_io = StringIO.new, args)
     stdout_io.rewind
@@ -55,6 +38,10 @@ describe DataDoc::CLI do
         execute_cli(@filename)
       end
   
+      it "should require a filename for connection option" do
+        proc { execute_cli('--connection') }.must_raise OptionParser::MissingArgument
+      end
+  
       describe "with connection settings file" do
           
         before do
@@ -67,14 +54,9 @@ YAML
         end
         
         it "should accept a connection option" do
-          filename = temp_file("")
-          execute_cli("--connection", "#{@connection_filename}", filename).must_equal ""
+          execute_cli("--connection", "#{@connection_filename}")
         end
-    
-        it "should require a connection file" do
-          proc { execute_cli('--connection') }.must_raise OptionParser::MissingArgument
-        end
-  
+      
       end
 
       it "should accept a read-only option" do
