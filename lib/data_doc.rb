@@ -6,7 +6,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 #
 module DataDoc
   # Gem version
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   # A summary of purpose of the tool.  
   DESCRIPTION = 'Processes structured data embedded in a markdown document and then renders it into configurable tables.'
 end

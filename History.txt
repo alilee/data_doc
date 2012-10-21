@@ -1,6 +1,14 @@
+=== 0.0.3 2012-10-22
+
+* 4 minor enhancements:
+  * RDoc coverage established
+  * Layouts
+  * Headers
+  * ERB processing under $SAFE = 4 
+  
 === 0.0.2 2012-10-18
 
-* 1 minor enhancement:
+* 2 minor enhancements:
   * Documentation fix
   * Test release
 
