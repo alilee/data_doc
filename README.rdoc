@@ -2,10 +2,12 @@
 
 * http://github.com/alilee/data_doc
 
-{<img src="https://secure.travis-ci.org/alilee/data_doc.png" alt="Build Status" />}[http://travis-ci.org/alilee/data_doc]
+== STATUS: 
 
-STATUS: Generates html from markdown files containing erb, including 
-layout and headers. No DSL yet!
+Generates html from markdown files containing erb, including layout and 
+headers. No DSL yet!
+
+{<img src="https://secure.travis-ci.org/alilee/data_doc.png" alt="Build Status" />}[http://travis-ci.org/alilee/data_doc]
 
 == DESCRIPTION:
 
