@@ -36,7 +36,7 @@ your level of risk.
 
 == SYNOPSIS:
 
-  $ bin/data_doc -h
+  $ bin/data_doc --help
   Processes structured data embedded in a markdown document and then renders it into configurable tables.
 
   Usage: data_doc [options] filename

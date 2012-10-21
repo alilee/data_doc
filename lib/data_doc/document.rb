@@ -15,6 +15,8 @@ module DataDoc
       @data_only = false
       @connection = nil
       @layout_filename = nil
+      
+      @headers = Array.new
     end
     
     attr_accessor :format, :output, :verbose, :read_only, :data_only
@@ -29,7 +31,7 @@ module DataDoc
     def layout=(filename)
       @layout_filename = filename
     end
-    
+        
     #
     # main function
     # 
@@ -54,25 +56,63 @@ module DataDoc
     end
     
     #
+    # DSL <head> tags
+    #
+  
+    def title(text)
+      add_header "<title>#{text}</title>"
+      "<div class=\"title\">#{text}</div>"
+    end
+    
+    def meta(attrs = {})
+      add_header "<meta #{html_attrs(attrs)}>"    
+    end
+
+    def script(attrs = {})
+      add_header "<script #{html_attrs(attrs)}>#{"\n"+yield+"\n" if block_given?}</script>"    
+    end
+  
+    def link(attrs = {})
+      add_header "<link #{html_attrs(attrs)}>"
+    end
+    
+    #
     # Layout
     #
     
     def self.default_layout
-      "<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n<%= yield %>\n</body>\n</html>"
+      "<!DOCTYPE html>\n<html>\n<head><%= yield :head %></head>\n<body>\n<%= yield %>\n</body>\n</html>"
     end
         
   protected
           
-    def binding_with_block
-      binding
+    class IsolatedLayoutContext
+      def binding_with_block
+        binding
+      end
     end
 
     def wrap_in_layout(content)
       @layout ||= @layout_filename.nil? ? DataDoc::Document.default_layout : File.read(@layout_filename)
-      block_binding = binding_with_block do |section|
-        content
+      block_binding = IsolatedLayoutContext.new.binding_with_block do |section|
+        case section.to_s
+        when 'head'
+          @headers.join("\n")
+        else
+          content
+        end
       end
       ERB.new(@layout, 4, '<>').result(block_binding.taint) # $SAFE = 4
+    end
+    
+    def html_attrs(attrs)
+      list = attrs.to_a.map {|k,v| "#{k}=\"#{v}\"" }
+      list.join(' ')
+    end
+    
+    def add_header(h)
+      @headers = @headers + [h]
+      h
     end
     
   end

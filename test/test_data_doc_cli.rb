@@ -8,7 +8,7 @@ describe DataDoc::CLI do
   def execute_cli(*args) 
     DataDoc::CLI.execute(stdout_io = StringIO.new, args)
     stdout_io.rewind
-    stdout_io.read.chomp
+    stdout_io.read.strip
   end
 
   describe "with no file" do

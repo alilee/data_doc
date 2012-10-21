@@ -13,7 +13,7 @@ describe DataDoc::Document do
     @doc.output = output
     @doc.generate(StringIO.new(@input))
     output.rewind
-    output.read.chomp.must_equal @expected_output.chomp
+    output.read.strip.must_equal @expected_output.strip
   end
       
   it "should process empty input" do
@@ -28,22 +28,49 @@ describe DataDoc::Document do
     @expected_output = '<h1>Introduction</h1>'
   end
   
-  it "should wrap the generated text in a layout" do
-    layout_filename = temp_file('layout:<%= yield %>:layout')
-    @input = "<% set_layout_file '#{layout_filename}' %>Some text."
-    @expected_output = "layout:<p>Some text.</p>\n:layout"
+  describe "layout" do
+
+    it "should wrap the generated text in a layout" do
+      layout_filename = temp_file('layout:<%= yield %>:layout')
+      @input = "<% set_layout_file '#{layout_filename}' %>Some text."
+      @expected_output = "layout:<p>Some text.</p>\n:layout"
+    end
+  
+    it "should wrap the content in a default html layout" do
+      @input = "<p>XXX</p>"
+      @expected_output = erb(DataDoc::Document.default_layout) do |section|
+        @input + "\n" if section.to_s != 'head'
+      end    
+    end
+    
   end
   
-  it "should wrap the content in a default html layout" do
-    @input = "<p>XXX</p>"
-    @expected_output = erb(DataDoc::Document.default_layout) do
-      @input + "\n"
-    end    
-  end
+  describe "head tags" do
   
-  # it "should insert meta tags into the head"
-  # it "should insert script tags into the head"
-  # it "should insert link tags into the head"
-  # it "should set the html document title in the head"
+    it "should insert meta tags into the head" do
+      @input = '<% meta author: "Author" %>'
+      @doc.layout = temp_file('<%= yield :head %>')
+      @expected_output = '<meta author="Author">'
+    end
+  
+    it "should insert script tags into the head" do
+      @input = '<% script(src: "jquery.js") { "XXX" } %>'
+      @doc.layout = temp_file('<%= yield :head %>')
+      @expected_output = "<script src=\"jquery.js\">\nXXX\n</script>"
+    end
+  
+    it "should insert link tags into the head" do
+      @input = '<% link rel: "stylesheet", type: "text/css", href: "mystyle.css" %>'
+      @doc.layout = temp_file('<%= yield :head %>')
+      @expected_output = '<link rel="stylesheet" type="text/css" href="mystyle.css">'
+    end
+  
+    it "should set the html document title in the head and in a div.title in the content" do
+      @input = '<%= title "Title" %>'
+      @doc.layout = temp_file('Head:<%= yield :head %>Content:<%= yield %>')
+      @expected_output = 'Head:<title>Title</title>Content:<div class="title">Title</div>'
+    end
+  
+  end
 
 end
