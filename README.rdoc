@@ -4,7 +4,8 @@
 
 {<img src="https://secure.travis-ci.org/alilee/data_doc.png" alt="Build Status" />}[http://travis-ci.org/alilee/data_doc]
 
-NOTE: THIS GEM DOES NOTHING YET.
+STATUS: Generates html from markdown files containing erb, including 
+layout and headers. No DSL yet!
 
 == DESCRIPTION:
 

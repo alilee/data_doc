@@ -72,5 +72,28 @@ describe DataDoc::Document do
     end
   
   end
+  
+  describe "defining stores" do
+    
+    before do
+      @db_filename = temp_file("")
+      @conn_filename = temp_file("adapter: sqlite3\ndatabase: #{@db_filename}") # YAML
+    end
+    
+    it "should specify connection settings to a database via DSL" do
+      @input = "<% set_connection adapter: 'sqlite3', database: '#{@db_filename}' %>"
+      @doc.layout = temp_file('')
+      @expected_output = ''
+    end
+    
+    it "should accept connection settings via option" do
+      @doc.connection = @conn_filename
+      @doc.layout = temp_file('<%= yield %>')
+      @input = ''
+      @expected_output = ''
+    end
+    
+  end
+  
 
 end

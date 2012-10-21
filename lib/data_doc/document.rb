@@ -1,5 +1,6 @@
 require 'rdiscount'
 require 'erb'
+require 'data_doc/store.rb'
 
 module DataDoc
 
@@ -29,6 +30,7 @@ module DataDoc
       @layout_filename = nil
       
       @headers = Array.new
+      @store = DataDoc::Store.new
     end
     
     # MIME-type for output
@@ -52,7 +54,8 @@ module DataDoc
     # 
     # Sets the database connection that the stores will be using
     #
-    def connection=(connection)
+    def connection=(conn_filename)
+      @store.connection = YAML::load_file(conn_filename)
     end
     
     # 
@@ -74,10 +77,12 @@ module DataDoc
     def generate(content_io)
       erb_content = content_io.read
       begin
+        @store.taint
         self.untrust
-        mark_down = ERB.new(erb_content, 4).result(binding.taint) # $SAFE = 4
+        mark_down = ERB.new(erb_content, 0).result(binding.taint) # TODO: $SAFE = 4
       ensure
         self.trust
+        @store.untaint
       end
       content_html = RDiscount.new(mark_down).to_html
       html = wrap_in_layout(content_html)
@@ -88,9 +93,14 @@ module DataDoc
     #
     # :section: 3. DSL for layout file
     #
+    # Each function below includes a usage example which shows how it would be
+    # called from within a content file.
+    #
     
     #
     # Set layout file (from the filename, not the template content itself)
+    #
+    #   <% set_layout_file 'myfile.html.erb' %>
     #
     # Content is html, with ERB placeholders to yield to add content at 
     # appropriate points.
@@ -113,6 +123,9 @@ module DataDoc
     
     #
     # :section: 4. DSL for header tags
+    #
+    # Each function below includes a usage example which shows how it would be
+    # called from within a content file.
     #
   
     #
@@ -144,14 +157,26 @@ module DataDoc
       add_header "<link #{html_attrs(attrs)}>"
     end
             
+            
     #
-    # :section: 5. Protected
+    # :section: 5. DSL for stores
     #
     
-  protected
-          
     #
-    # Isolates ERB for layout
+    # Specifies a file containing the ActiveRecord connection settings.
+    #
+    def set_connection(connection)
+      @store.connection = connection
+    end
+            
+  protected
+
+    #
+    # :section: 9. Protected
+    #
+              
+    #
+    # Isolates ERB for layout.
     #
     class IsolatedLayoutContext
       # captures binding including any block
