@@ -2,7 +2,7 @@
 
 * http://github.com/alilee/data_doc
 
-== STATUS: 
+== DEVELOPMENT STATUS: 
 
 Generates html from markdown files containing erb, including layout and 
 headers. No DSL yet!
