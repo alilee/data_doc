@@ -18,13 +18,20 @@ describe DataDoc::CLI do
   end
   
   it "should present version" do
-    execute_cli('--version').must_match DataDoc::VERSION
+    execute_cli('--version').must_equal DataDoc::VERSION
   end
   
   it "should process a file" do
     File.open(@filename, "w") do
     end
-    execute_cli(@filename).must_match ""
+    execute_cli(@filename).must_equal ""
+  end
+  
+  it "should present help" do
+    result = execute_cli('--help')
+    result.must_match /#{DataDoc::DESCRIPTION}/
+    result.must_match /Usage:/
+    result.must_match /--help/
   end
     
 end

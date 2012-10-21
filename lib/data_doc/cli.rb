@@ -10,8 +10,7 @@ module DataDoc
 
       OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^          /,'')
-          Processes structured data embedded in a markdown document and 
-          then renders it into configurable tables.
+          #{DataDoc::DESCRIPTION}
 
           Usage: #{File.basename($0)} [options] filename
 
