@@ -8,7 +8,7 @@ describe DataDoc::Store do
   
   it "should accept connection settings" do
     @db_filename = temp_file("")
-    @store.connection adapter: 'sqlite3', database: @db_filename
+    @store.connection = {adapter: 'sqlite3', database: @db_filename}
   end  
   
 end
