@@ -73,9 +73,12 @@ module DataDoc
     #
     def generate(content_io)
       erb_content = content_io.read
-      self.untrust
-      mark_down = ERB.new(erb_content, 4).result(binding.taint) # $SAFE = 4
-      self.trust
+      begin
+        self.untrust
+        mark_down = ERB.new(erb_content, 4).result(binding.taint) # $SAFE = 4
+      ensure
+        self.trust
+      end
       content_html = RDiscount.new(mark_down).to_html
       html = wrap_in_layout(content_html)
       @output.write(html)
