@@ -2,8 +2,18 @@ require 'optparse'
 require 'yaml'
 
 module DataDoc
+  
+  #
+  # Manages command-line options and arguments.
+  #
   class CLI
             
+    #
+    # Parses the command line and calls the main object.
+    #
+    # stdout:: IO to redirect output for testing.
+    # arguments:: contents of command line
+    #
     def self.execute(stdout, arguments=[])
 
       doc = DataDoc::Document.new
