@@ -36,7 +36,25 @@ your level of risk.
 
 == SYNOPSIS:
 
-  data_doc your_file.md.erb > result.html
+  $ bin/data_doc -h
+  Processes structured data embedded in a markdown document and then renders it into configurable tables.
+
+  Usage: data_doc [options] filename
+
+  Options are:
+
+  Specific options:
+      -c, --connection FILENAME        Override document connection settings with FILENAME
+      -r, --read-only                  Use data already in database rather than document data
+      -d, --data-only                  Use document data but do not change database schema
+      -o, --output FILENAME            Put generated output in FILENAME
+      -f, --format TYPE                Select type of output from html (default: html)
+      -v, --[no-]verbose               Run verbosely
+
+  Common options:
+      -h, --help                       Show this message
+          --version                    Show version
+  $
   
 The data definition language looks like this:
 
