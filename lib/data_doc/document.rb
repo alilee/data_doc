@@ -30,7 +30,7 @@ module DataDoc
       @layout_filename = nil
       
       @headers = Array.new
-      @store = DataDoc::Store.new
+      @store = DataDoc::Store.new(self)
     end
     
     # MIME-type for output
@@ -46,11 +46,19 @@ module DataDoc
     attr_accessor :verbose
 
     # do not change schema or data
-    attr_accessor :read_only 
+    attr_reader :read_only 
 
     # do not change schema; truncates tables
     attr_accessor :data_only
     
+    #
+    # Do not change schema or data.
+    #
+    def read_only=(ro)
+      @read_only = ro
+      @data_only = ro if ro
+    end
+
     # 
     # Sets the database connection that the stores will be using
     #
