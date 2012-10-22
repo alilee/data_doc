@@ -93,6 +93,9 @@ module DataDoc
     
   protected
     
+    #
+    # Insert a row from a hash. 
+    #
     def insert(arel, record)
       manager = arel.insert_manager
       columns = record.keys.map { |k| arel[k] }
@@ -100,6 +103,11 @@ module DataDoc
       @connection.insert(manager)
     end
     
+    #
+    # Allow use of relation names as calls.
+    #
+    # If no args then returns an arel for querying.
+    #
     def method_missing(name, *args, &block)
       table_name = name.to_s
       if @arels.has_key?(table_name)
