@@ -12,4 +12,3 @@ module DataDoc
 end
 
 require 'data_doc/document.rb'
-# require 'data_doc/table.rb'
