@@ -181,7 +181,7 @@ module DataDoc
     # Define a table store.
     #
     def store(name, opts = {}, &blk)
-      @stores[name.to_s] = DataDoc::Store.new(self, name, opts, &blk)
+      @stores[name.to_s] = DataDoc::Store.store(self, name, opts, &blk)
       name
     end
     

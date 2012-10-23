@@ -19,7 +19,7 @@ describe DataDoc::Store do
       end
 
       after do
-        DataDoc::Store.new(@mock_doc, 'relation')
+        DataDoc::Store.store(@mock_doc, 'relation')
         @mock_doc.connection.select_value('select count(1) from relation').must_equal @expected_rows
         if @confirm_old_table_value
           @mock_doc.connection.select_value('select string from relation limit 1').must_equal 'present'
@@ -61,28 +61,28 @@ describe DataDoc::Store do
       end
           
       it "adds a string attribute" do
-        DataDoc::Store.new(@mock_doc, 'relation') do
+        DataDoc::Store.store(@mock_doc, 'relation') do
           string 'string'
         end
         check_insert('string', 'a string')
       end
           
       it "adds an integer attribute" do
-        DataDoc::Store.new(@mock_doc, 'relation') do
+        DataDoc::Store.store(@mock_doc, 'relation') do
           integer 'number'
         end
         check_insert('number', 42)
       end
           
       it "adds a text attribute" do
-        DataDoc::Store.new(@mock_doc, 'relation') do
+        DataDoc::Store.store(@mock_doc, 'relation') do
           text 'description'
         end
         check_insert('description', 'a string')            
       end
           
       it "adds a datetime attribute" do
-        DataDoc::Store.new(@mock_doc, 'relation') do
+        DataDoc::Store.store(@mock_doc, 'relation') do
           datetime 'timestamp'
         end
         check_insert('timestamp', '2012-10-12')
@@ -98,7 +98,7 @@ describe DataDoc::Store do
   describe "accepting rows" do
           
     before do
-      @store = DataDoc::Store.new(@mock_doc, 'relation') do
+      @store = DataDoc::Store.store(@mock_doc, 'relation') do
         string 's'
         integer 'i'
         text 't'
