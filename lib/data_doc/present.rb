@@ -10,6 +10,14 @@ module DataDoc
     #
     # Accept display options from a block. Returns html table.
     #
+    #   present 'select one, two from relation' do
+    #     caption 'Table caption'
+    #     column_order 'two', 'one'
+    #   end
+    #
+    # For more table configuration options see the member functions
+    # of DataDoc::Present
+    #
     def self.present(doc, arel_or_str, &blk)
       rows = doc.connection.select_all(arel_or_str)
       p = Present.new(doc, rows)
@@ -22,6 +30,10 @@ module DataDoc
     #
     # Not every field queried needs to be presented.
     #
+    #   present 'select one, two from relation' do 
+    #     column_order 'two', 'one'
+    #   end
+    #
     def column_order(*order)
       @column_order = order
     end
@@ -29,12 +41,20 @@ module DataDoc
     #
     # Set the caption for the table
     #
+    #   present 'select 1' do 
+    #     caption 'Table caption'
+    #   end
+    #
     def caption(text)
       @caption = text
     end
     
     #
     # Rename the column heading text for a particular column.
+    #
+    #   present 'select one, two from relation' do 
+    #     label 'one', 'New column heading'
+    #   end
     #
     def label(column, text)
       @labels[column] = text
@@ -46,12 +66,24 @@ module DataDoc
     #
     # Return nil to revert to the default behaviour.
     #
+    #   present 'select one, two from relation' do 
+    #     each_cell 'one' do |col, row|
+    #       row[col] == 'true' ? 'Short' : 'Long'
+    #     end
+    #   end
+    #
     def each_cell(col, &blk) # :yields: col, row
       @each_cell[col] = blk
     end
     
     #
     # Define a calculated column based on a block.
+    #
+    #   present 'select one, two from relation' do 
+    #     calculated 'three' do |col, row|
+    #       row['two'] == 'true' ? 'Short' : 'Long'
+    #     end
+    #   end
     #
     def calculated(col, &blk) # :yields: row
       @calculated[col] = blk
