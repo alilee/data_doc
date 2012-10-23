@@ -22,6 +22,9 @@ module DataDoc
       @connection = @doc.connection
       create_store(table_name_or_sym, opts, &blk)
     end
+    
+    # AREL object encapsulating table.
+    attr_reader :arel
             
     #
     # Define a string field.
