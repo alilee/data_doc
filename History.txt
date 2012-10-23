@@ -1,3 +1,14 @@
+=== 0.1.0 2012-10-23
+
+* 2 major enhancements:
+  * DSL for stores, including adding rows
+  * DSL for presenting simple tables
+  
+* 2 known issues
+  * ERB processing under $SAFE = 4 unavailable 
+  * Good testing coverage, although possibly too complex
+    in use of nested describes and before and after
+
 === 0.0.3 2012-10-22
 
 * 4 minor enhancements:
