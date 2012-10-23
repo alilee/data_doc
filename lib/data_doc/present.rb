@@ -46,14 +46,14 @@ module DataDoc
     #
     # Return nil to revert to the default behaviour.
     #
-    def each_cell(&blk) # :yields: col, row
-      @each_cell = blk
+    def each_cell(col, &blk) # :yields: col, row
+      @each_cell[col] = blk
     end
     
     #
     # Define a calculated column based on a block.
     #
-    def calculate(col, &blk) # :yields: row
+    def calculated(col, &blk) # :yields: row
       @calculated[col] = blk
     end
     
@@ -73,11 +73,12 @@ module DataDoc
         h.tbody {
           @rows.each do |r|
             h.tr {
-              if @each_cell.nil?
-                @column_order.each {|col| h.td(r[col.to_s]) }
-              else
-                @column_order.each do |col|
-                  h.td(@each_cell.call(r, col) || r[col.to_s])
+              @column_order.each do |col|
+                r[col.to_s] = @calculated[col].call(col, r) unless @calculated[col].nil?
+                if @each_cell[col].nil?
+                  h.td(r[col.to_s])
+                else
+                  h.td(@each_cell[col].call(col, r) || r[col.to_s])
                 end
               end
             }
@@ -95,7 +96,7 @@ module DataDoc
       @doc = doc
       @rows = rows
       @caption = nil
-      @each_cell = nil
+      @each_cell = Hash.new
       @labels = Hash.new
       @calculated = Hash.new
       @column_order = rows.first.keys
