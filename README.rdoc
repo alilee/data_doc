@@ -5,8 +5,8 @@
 == DEVELOPMENT STATUS: 
 
 Generates html from markdown files containing erb, including layout and 
-headers. DSL in place for stores, attributes and simple tables. Testing 
-doesn't quite cover the Present DSL.
+headers. DSL in place for stores, attributes and simple tables, but no 
+alternate keys.
 
 {<img src="https://secure.travis-ci.org/alilee/data_doc.png" alt="Build Status" />}[http://travis-ci.org/alilee/data_doc] {<img src="https://gemnasium.com/alilee/data_doc.png" alt="Dependency Status" />}[https://gemnasium.com/alilee/data_doc] {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/alilee/data_doc]
 
