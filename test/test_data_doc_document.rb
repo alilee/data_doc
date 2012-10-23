@@ -10,11 +10,8 @@ describe DataDoc::Document do
   end
 
   after do
-    output = StringIO.new
-    @doc.output = output
-    @doc.generate(StringIO.new(@input))
-    output.rewind
-    output.read.strip.must_equal @expected_output.strip
+    output = @doc.generate(StringIO.new(@input))
+    output.strip.must_equal @expected_output.strip
     unless @expected_rows.nil?
       @doc.connection.select_value("select count(1) from #{@expected_table_name}").must_equal(@expected_rows)
     end

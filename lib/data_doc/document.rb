@@ -23,7 +23,6 @@ module DataDoc
     #
     def initialize
       @format = 'html'
-      @output = STDOUT
       @verbose = false
       @read_only = false
       @data_only = false
@@ -39,9 +38,6 @@ module DataDoc
 
     # Available mime types that can be generated.
     OUTPUT_TYPES = ['html']
-
-    # output filename
-    attr_accessor :output 
 
     # display verbose output during processing
     attr_accessor :verbose
@@ -98,9 +94,7 @@ module DataDoc
         # @store.untaint
       end
       content_html = RDiscount.new(mark_down).to_html
-      html = wrap_in_layout(content_html)
-      @output.write(html)
-      0
+      wrap_in_layout(content_html)
     end
     
     #

@@ -17,7 +17,7 @@ module DataDoc
     def self.execute(stdout, arguments=[])
 
       doc = DataDoc::Document.new
-      doc.output = stdout
+      filename = nil
 
       OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^          /,'')
@@ -50,13 +50,8 @@ module DataDoc
         end
 
         opts.on("-o", "--output FILENAME", 
-                "Put generated output in FILENAME") do |filename|
-          begin
-            doc.output = File.open(filename, 'w+')
-          rescue Exception => e
-            stdout.puts "ERROR with output file (#{e.message})"
-            return 1
-          end
+                "Put generated output in FILENAME") do |f|  
+          filename = f
         end
                 
         type_list = DataDoc::Document::OUTPUT_TYPES.join(', ')
@@ -97,7 +92,20 @@ module DataDoc
         return 1
       end
             
-      doc.generate(content)
+      result = doc.generate(content)
+      unless filename.nil?
+        begin
+          File.open(filename, 'w+') do |f|
+            f.write(result)
+          end
+        rescue Exception => e
+          stdout.puts "ERROR with output file (#{e.message})"
+          return 1
+        end
+      else
+        stdout.write(result)
+      end
+      0      
     end
   end
 end

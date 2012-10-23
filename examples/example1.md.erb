@@ -32,13 +32,13 @@ configurable tables.
 
 # Features
 
-<%= present features.project('description').where("implemented = 'Yes'") do
+<%= present features.project('description').where(features[:implemented].eq('Yes')) do
       caption 'Features of data_doc'
     end %>
 
 # Todo
 
-<%= present features.project('description').where("implemented = 'No'") do
+<%= present features.project('description').where(features[:implemented].eq('No')) do
       caption 'Pending features of data_doc'
     end %>
     
