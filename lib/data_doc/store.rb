@@ -30,9 +30,10 @@ module DataDoc
     #
     # Define a string field.
     #
-    #   store
-    #
-    #
+    #   store 'relation' do
+    #     string 'field_name', default: 'value'
+    #     string :another_field, null: false
+    #   end
     #
     def string(name, opts = {})
       @connection.add_column(@arel.name, name, :string, opts)
@@ -41,12 +42,22 @@ module DataDoc
     #
     # Define an integer field.
     #
+    #   store 'relation' do
+    #     integer 'field_name', default: 42
+    #     integer :another_field
+    #   end
+    #
     def integer(name, opts = {})
       @connection.add_column(@arel.name, name, :integer, opts)
     end
     
     # 
     # Define a text field.
+    #
+    #   store 'relation' do
+    #     text 'field_name'
+    #     text :another_field
+    #   end
     #
     def text(name, opts = {})
       @connection.add_column(@arel.name, name, :text, opts)
@@ -55,10 +66,64 @@ module DataDoc
     # 
     # Define a datetime field.
     #
+    #   store 'relation' do
+    #     datetime 'field_name'
+    #     datetime :another_field
+    #   end
+    #
     def datetime(name, opts = {})
       @connection.add_column(@arel.name, name, :datetime, opts)
     end    
     
+    
+    # 
+    # Define a datetime field.
+    #
+    #   store 'relation' do
+    #     time 'field_name'
+    #     time :another_field
+    #   end
+    #
+    def time(name, opts = {})
+      @connection.add_column(@arel.name, name, :time, opts)
+    end
+    
+    # 
+    # Define a date field.
+    #
+    #   store 'relation' do
+    #     date 'field_name'
+    #     date :another_field
+    #   end
+    #
+    def date(name, opts = {})
+      @connection.add_column(@arel.name, name, :date, opts)
+    end
+    
+    # 
+    # Define a boolean field.
+    #
+    #   store 'relation' do
+    #     boolean 'field_name'
+    #     boolean :another_field
+    #   end
+    #
+    def boolean(name, opts = {})
+      @connection.add_column(@arel.name, name, :boolean, opts)
+    end
+    
+    # 
+    # Define a float field.
+    #
+    #   store 'relation' do
+    #     float 'field_name'
+    #     float :another_field
+    #   end
+    #
+    def float(name, opts = {})
+      @connection.add_column(@arel.name, name, :float, opts)
+    end   
+  
     #
     # Insert a row from a hash. 
     #

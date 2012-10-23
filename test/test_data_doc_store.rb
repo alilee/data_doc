@@ -88,6 +88,33 @@ describe DataDoc::Store do
         check_insert('timestamp', '2012-10-12')
       end
 
+      it "adds a date attribute" do
+        DataDoc::Store.store(@mock_doc, 'relation') do
+          date 'datestamp'
+        end
+        check_insert('datestamp', Date.today)
+      end
+
+      it "adds a time attribute" do
+        DataDoc::Store.store(@mock_doc, 'relation') do
+          time 'timestamp'
+        end
+        check_insert('timestamp', Time.now)
+      end
+
+      it "adds a float attribute" do
+        DataDoc::Store.store(@mock_doc, 'relation') do
+          float 'value'
+        end
+        check_insert('value', 42.234)
+      end
+
+      it "adds a boolean attribute" do
+        DataDoc::Store.store(@mock_doc, 'relation') do
+          boolean 'flag'
+        end
+        check_insert('flag', true)
+      end
     end
 
     describe "alternate keys" do
