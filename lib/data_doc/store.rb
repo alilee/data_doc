@@ -75,7 +75,6 @@ module DataDoc
       @connection.add_column(@arel.name, name, :datetime, opts)
     end    
     
-    
     # 
     # Define a datetime field.
     #
@@ -150,6 +149,9 @@ module DataDoc
       end
     end
     
+    #
+    # Create new.
+    #
     def initialize(doc)
       @doc = doc
       @connection = @doc.connection
