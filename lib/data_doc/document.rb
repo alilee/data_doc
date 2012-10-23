@@ -30,7 +30,7 @@ module DataDoc
       @layout_filename = nil
       
       @headers = Array.new
-      @store = DataDoc::Store.new(self)
+      @stores = Hash.new
     end
     
     # MIME-type for output
@@ -51,6 +51,9 @@ module DataDoc
     # do not change schema; truncates tables
     attr_accessor :data_only
     
+    # ActiveRecord connection
+    attr_reader :connection
+    
     #
     # Do not change schema or data.
     #
@@ -63,8 +66,9 @@ module DataDoc
     # Sets the database connection that the stores will be using
     #
     def connection=(conn_filename)
-      @store.connection = YAML::load_file(conn_filename)
-    end
+      settings = YAML::load_file(conn_filename)
+      set_connection(settings)
+    end    
     
     # 
     # Sets the layout file option.
@@ -85,12 +89,12 @@ module DataDoc
     def generate(content_io)
       erb_content = content_io.read
       begin
-        @store.taint
-        self.untrust
+        # @store.taint
+        # self.untrust
         mark_down = ERB.new(erb_content, 0).result(binding.taint) # TODO: $SAFE = 4
       ensure
-        self.trust
-        @store.untaint
+        # self.trust
+        # @store.untaint
       end
       content_html = RDiscount.new(mark_down).to_html
       html = wrap_in_layout(content_html)
@@ -171,10 +175,19 @@ module DataDoc
     #
     
     #
-    # Specifies a file containing the ActiveRecord connection settings.
+    # Specifies ActiveRecord connection settings.
     #
-    def set_connection(connection)
-      @store.connection = connection
+    def set_connection(settings)
+      ActiveRecord::Base.establish_connection(settings)
+      @connection = ActiveRecord::Base.connection
+    end
+    
+    #
+    # Define a table store.
+    #
+    def store(name, opts = {}, &blk)
+      @stores[name.to_s] = DataDoc::Store.new(self, name, opts, &blk)
+      name
     end
             
   protected
@@ -225,6 +238,25 @@ module DataDoc
       @headers = @headers + [h]
       h
     end
+    
+    #
+    # Allow use of relation names as calls for adding or querying.
+    #
+    # If no args then returns an arel for querying, otherwise assumes add.
+    #
+    def method_missing(name, *args, &block)
+      table_name = name.to_s
+      if @stores.has_key?(table_name)
+        if args.empty?
+          return @stores[table_name].arel
+        else
+          @stores[table_name].insert(*args)
+        end
+      else
+        super
+      end 
+    end
+    
     
   end
   

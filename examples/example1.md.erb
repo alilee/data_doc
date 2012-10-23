@@ -1,0 +1,47 @@
+<%= title 'Data-Doc Example 1' %>
+
+<% set_connection adapter: 'sqlite3', database: './examples/example1.db' 
+
+   store 'features' do
+     string 'description'
+     string 'implemented'
+   end
+   
+   features description: 'Main document is Markdown for convenient content authoring.', implemented: 'Yes'
+   features description: 'Builds up data in relational database, facilitating review and analysis.', implemented: 'Yes'
+   features description: 'Generates HTML from Markdown.', implemented: 'Yes'
+   features description: 'Provides fine-grained control over the HTML headers, including CSS, for the output.', implemented: 'Yes'
+   features description: 'Simple DSL for capturing structured data.', implemented: 'Yes'
+   features description: 'Simple DSL for querying data stores and laying out in tables.', implemented: 'Yes'
+   features description: 'Command line interface', implemented: 'Yes'
+   features description: 'Simple web-page interface using sinatra', implemented: 'No'
+%>
+
+# Introduction
+
+This is a simple example of input for the ruby gem *data_doc*.
+
+# Description
+
+Complex documents can be challenging to author, and time-consuming to achieve 
+high levels of internal consistency. This gem offers a Domain Specific Language 
+to embed structured data in a markdown document and then render it into 
+configurable tables. 
+
+*Note: Check security implications*
+
+# Features
+
+<%= present features.project('description').where("implemented = 'Yes'") do
+      caption 'Features of data_doc'
+    end %>
+
+# Todo
+
+<%= present features.project('description').where("implemented = 'No'") do
+      caption 'Pending features of data_doc'
+    end %>
+    
+<%
+    meta author: "Alister Lee"
+%>

@@ -93,6 +93,13 @@ describe DataDoc::Document do
       @expected_output = ''
     end
     
+    it "should define stores" do
+      @doc.connection = @conn_filename
+      @doc.layout = temp_file('<%= yield %>')
+      @input = "<% store 'relation' %>"
+      @expected_output = ''
+    end
+    
   end
   
 

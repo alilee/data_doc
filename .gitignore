@@ -1,3 +1,5 @@
 pkg
 doc
 .bundle
+examples/*.db
+examples/*.html

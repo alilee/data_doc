@@ -15,7 +15,18 @@ def temp_file(content)
   f.path
 end
 
+
 # allows yield to call block
 def erb(content)
   ERB.new(content).result(binding)
+end
+
+# connection to temp database
+def test_connection
+  settings = {
+    adapter: 'sqlite3',
+    database: temp_file("")
+  }
+  ActiveRecord::Base.establish_connection(settings)
+  ActiveRecord::Base.connection
 end
