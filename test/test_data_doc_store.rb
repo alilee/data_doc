@@ -2,18 +2,6 @@ require_relative 'test_helper.rb'
 
 describe DataDoc::Store do
     
-  class MockDoc
-
-    attr_accessor :data_only, :read_only, :connection
-
-    def initialize
-      @data_only = false
-      @read_only = false
-      @connection = test_connection
-    end
-
-  end
-
   before do
     @mock_doc = MockDoc.new
   end
@@ -108,7 +96,7 @@ describe DataDoc::Store do
   end
 
   describe "accepting rows" do
-      
+          
     before do
       @store = DataDoc::Store.new(@mock_doc, 'relation') do
         string 's'
@@ -118,14 +106,34 @@ describe DataDoc::Store do
       @mock_doc.connection.select_value("select count(1) from relation").must_equal 0
     end
     
-    after do
-      @mock_doc.connection.select_value("select count(1) from relation").must_equal 1
-    end
+    describe "when not read_only" do
+    
+      after do
+        @mock_doc.connection.select_value("select count(1) from relation").must_equal 1
+      end
       
-    it "should accept a row" do
-      @store.insert(s: 'a string', i: 42, t: 'a string')
+      it "should accept a row" do
+        @store.insert(s: 'a string', i: 42, t: 'a string')
+      end
+
     end
+    
+    describe "when read_only" do
+
+      before do
+        @mock_doc.read_only = true
+      end
+
+      after do
+        @mock_doc.connection.select_value("select count(1) from relation").must_equal 0
+      end
       
+      it "should ignore a row" do
+        @store.insert(s: 'a string', i: 42, t: 'a string')
+      end
+      
+    end
+    
   end
 
 end

@@ -30,3 +30,16 @@ def test_connection
   ActiveRecord::Base.establish_connection(settings)
   ActiveRecord::Base.connection
 end
+
+# Test Document for Store and Present
+class MockDoc
+
+  attr_accessor :data_only, :read_only, :connection
+
+  def initialize
+    @data_only = false
+    @read_only = false
+    @connection = test_connection
+  end
+
+end

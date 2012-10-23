@@ -6,6 +6,7 @@ describe DataDoc::Document do
     @doc = DataDoc::Document.new
     @input = ""
     @expected_output = ""
+    @expected_rows = nil
   end
 
   after do
@@ -14,6 +15,9 @@ describe DataDoc::Document do
     @doc.generate(StringIO.new(@input))
     output.rewind
     output.read.strip.must_equal @expected_output.strip
+    unless @expected_rows.nil?
+      @doc.connection.select_value("select count(1) from #{@expected_table_name}").must_equal(@expected_rows)
+    end
   end
       
   it "should process empty input" do
@@ -100,7 +104,65 @@ describe DataDoc::Document do
       @expected_output = ''
     end
     
+    describe "adding rows" do
+      
+      before do
+        @doc.connection = @conn_filename
+        @doc.layout = temp_file('<%= yield %>')
+        @expected_output = ''
+        @expected_table_name = 'relation'
+        @input = <<EOS
+<% store 'relation' do
+     string 'string'
+   end
+   relation string: 'a string'
+%>      
+EOS
+      end
+            
+      it "should accept a row" do
+        @expected_rows = 1
+      end
+      
+      describe "when read_only" do
+
+        before do
+          @doc.connection.execute("create table relation(integer id, varchar string)")
+          @doc.read_only = true
+        end
+        
+        it "should ignore a row" do
+          @expected_rows = 0          
+        end
+        
+      end
+      
+    end
+    
   end
   
+  describe "presenting tables" do
+    
+    before do
+      db_filename = temp_file("")
+      conn_filename = temp_file("adapter: sqlite3\ndatabase: #{db_filename}") # YAML
+      @doc.connection = conn_filename
+      @doc.layout = temp_file('<%= yield %>')
+      @doc.store 'relation' do
+        string 'string'
+        integer 'number'
+      end
+      @doc.relation(string: 'a string', number: 42)
+    end
+    
+    it "should present raw sql" do
+      @doc.present("select * from relation").must_match(/<table>.*<\/table>/) 
+    end
+    
+    it "should present an arel" do
+      @doc.present(@doc.relation.project('*')).must_match(/<table>.*<\/table>/)
+    end
+    
+  end
 
 end

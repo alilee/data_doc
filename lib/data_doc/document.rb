@@ -1,6 +1,7 @@
 require 'rdiscount'
 require 'erb'
 require 'data_doc/store.rb'
+require 'data_doc/present.rb'
 
 module DataDoc
 
@@ -189,6 +190,18 @@ module DataDoc
       @stores[name.to_s] = DataDoc::Store.new(self, name, opts, &blk)
       name
     end
+    
+    #
+    # :section: 6. DSL for presenting tables
+    #
+    
+    #
+    # Present a table. Pass a block to set options for display.
+    # For more information see DataDoc::Present
+    #
+    def present(arel_or_str)
+      DataDoc::Present.present(self, arel_or_str)
+    end
             
   protected
 
@@ -250,7 +263,7 @@ module DataDoc
         if args.empty?
           return @stores[table_name].arel
         else
-          @stores[table_name].insert(*args)
+          @stores[table_name].insert(*args) unless @read_only
         end
       else
         super

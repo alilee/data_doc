@@ -58,6 +58,7 @@ module DataDoc
     # Insert a row from a hash. 
     #
     def insert(record)
+      return if @doc.read_only
       manager = @arel.insert_manager
       columns = record.keys.map { |k| @arel[k] }
       manager.insert(columns.zip(record.values))
