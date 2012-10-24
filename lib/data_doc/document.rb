@@ -193,8 +193,8 @@ module DataDoc
     # Present a table. Pass a block to set options for display.
     # For more information see DataDoc::Present
     #
-    def present(arel_or_str)
-      DataDoc::Present.present(self, arel_or_str)
+    def present(arel_or_str, &blk)
+      DataDoc::Present.present(self, arel_or_str, &blk)
     end
             
   protected

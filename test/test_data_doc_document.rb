@@ -157,7 +157,16 @@ EOS
     end
     
     it "should present an arel" do
-      @doc.present(@doc.relation.project('*')).must_match(/<table>.*<\/table>/)
+      table = @doc.present(@doc.relation.project('*'))
+      table.must_match(/<table>.*<\/table>/)
+    end
+
+    it "should call a block for table configuration" do
+      table = @doc.present(@doc.relation.project('*')) do
+        caption 'Caption'
+      end
+      table.must_match(/<table>.*<\/table>/)
+      table.must_match(/<caption>Caption<\/caption>/)
     end
     
   end
