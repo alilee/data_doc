@@ -147,7 +147,7 @@ module DataDoc
     # Adds a meta tag to the headers
     #
     def meta(attrs = {})
-      add_header "<meta #{html_attrs(attrs)}>"    
+      add_header "<meta #{html_attrs(attrs)} />"    
     end
 
     #
@@ -161,7 +161,7 @@ module DataDoc
     # Adds a link tag to the headers
     #
     def link(attrs = {})
-      add_header "<link #{html_attrs(attrs)}>"
+      add_header "<link #{html_attrs(attrs)} />"
     end
             
             
