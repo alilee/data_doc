@@ -32,9 +32,9 @@ module DataDoc
         opts.separator "Specific options:"
 
         opts.on("-c", "--connection FILENAME", 
-                "Override document connection settings with FILENAME") do |filename|
+                "Override document connection settings with FILENAME") do |conn_filename|
           begin
-            doc.connection = YAML.load(File.read(filename))
+            doc.connection = YAML.load(File.read(conn_filename))
           rescue Exception => e
             stdout.puts "ERROR with connection file (#{e.message})"
             return 1
