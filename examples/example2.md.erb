@@ -21,6 +21,9 @@
    approver name: 'B. Boss', role: 'Second Level Manager'
 %>
 
+<div id="program">Overarching Glorious Program (OGP)</div>
+<div id="tagline">A better future through self-checking documents</div>
+
 <%= title 'Lorem' %>
 
 <%
@@ -34,14 +37,33 @@
 
 # Document Control
 
-## Document history
+### Information
+<%  store 'control_item' do 
+      string 'item'
+      text 'content'
+    end
+   
+    control_item item: 'Document name', content: 'High-level requirements document'
+    control_item item: 'Issue date', content: Date.new(2012,10,12).to_s
+    control_item item: 'Authors', content: 'Alister Lee'
+    control_item item: 'Owner', content: 'Vice-President Sales'
+    control_item item: 'TRIM container', content: 'ADD2012/22222'
+    control_item item: 'File name', content: 'examples/examples2.md.erb'
+    control_item item: 'TRIM reference', content: 'ADD2012/333333'        
+%>
+<%= present 'select item, content from control_item' do
+      no_header
+    end
+%>
+
+### History
 <%= present 'select version, editor, updated_on from revision order by version' do
       label 'updated_on', 'Updated date'
     end
 %>
 
-## Approvals
-<%= present 'select * from approver order by signed_on' %>
+### Approvals
+<%= present 'select name, role, signed_on from approver order by signed_on, id' %>
 
 # Introduction
 

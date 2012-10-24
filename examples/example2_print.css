@@ -1,9 +1,18 @@
+/* Starting point: h5bp.com on 24/10/2012 */
+
 * {
   background: transparent !important;
   color: black !important;
   text-shadow: none !important;
   filter: none !important;
   -ms-filter: none !important;
+}
+body {
+	font-family: Georgia, "Times New Roman", Times, serif;
+  background-color: white;
+  color: black; 
+	font-size: 12pt;
+	line-height: 18pt;
 }
 /* Black prints faster: h5bp.com/s */
 a, a:visited {

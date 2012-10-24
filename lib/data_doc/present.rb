@@ -21,7 +21,7 @@ module DataDoc
     def self.present(doc, arel_or_str, &blk)
       rows = doc.connection.select_all(arel_or_str)
       p = Present.new(doc, rows)
-      p.instance_eval(&blk) if block_given?
+      p.instance_eval(&blk) unless blk.nil?
       p.render
     end
     

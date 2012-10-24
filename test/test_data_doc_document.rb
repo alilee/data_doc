@@ -51,7 +51,7 @@ describe DataDoc::Document do
     it "should insert meta tags into the head" do
       @input = '<% meta author: "Author" %>'
       @doc.layout = temp_file('<%= yield :head %>')
-      @expected_output = '<meta author="Author">'
+      @expected_output = '<meta author="Author" />'
     end
   
     it "should insert script tags into the head" do
@@ -63,7 +63,7 @@ describe DataDoc::Document do
     it "should insert link tags into the head" do
       @input = '<% link rel: "stylesheet", type: "text/css", href: "mystyle.css" %>'
       @doc.layout = temp_file('<%= yield :head %>')
-      @expected_output = '<link rel="stylesheet" type="text/css" href="mystyle.css">'
+      @expected_output = '<link rel="stylesheet" type="text/css" href="mystyle.css" />'
     end
   
     it "should set the html document title in the head and in a div.title in the content" do
