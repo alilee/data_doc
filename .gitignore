@@ -1,6 +1,7 @@
 pkg
 doc
 .bundle
-examples/*.db
-examples/*.html
-examples/*.pdf
+examples/example?.html
+examples/example?.pdf
+examples/example?.db
+
