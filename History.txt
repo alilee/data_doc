@@ -1,3 +1,14 @@
+=== 0.2.0 2012-10-25
+
+* 1 major enhancement:
+  * Generates PDF (using prince)
+  
+* 1 minor enhancement:
+  * Improved examples
+
+* 1 known issue:
+  * ERB processing under $SAFE = 4 unavailable 
+
 === 0.1.0 2012-10-23
 
 * 2 major enhancements:
