@@ -24,7 +24,7 @@ Note: See security implications below.
 * Main document is Markdown for convenient content authoring.
 * Builds up data in relational database, facilitating review and 
   analysis.
-* Generates HTML from Markdown.
+* Generates HTML from Markdown, and pdf if {prince}[princexml.com] is available.
 * Provides fine-grained control over the HTML headers, including 
   CSS, for the output.
 * Simple DSL for capturing structured data.
@@ -52,7 +52,8 @@ your level of risk.
       -r, --read-only                  Use data already in database rather than document data
       -d, --data-only                  Use document data but do not change database schema
       -o, --output FILENAME            Put generated output in FILENAME
-      -f, --format TYPE                Select type of output from html (default: html)
+      -f, --format TYPE                Select type of output from html, pdf (default: html)
+      -p, --prince PATH                Path for prince pdf generator
       -v, --[no-]verbose               Run verbosely
 
   Common options:
