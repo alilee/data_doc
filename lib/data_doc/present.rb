@@ -107,28 +107,9 @@ module DataDoc
       h = Builder::XmlMarkup.new
       h.table {
         h.caption(@caption) unless @caption.nil?
-        unless @no_headers 
-          h.thead {
-            h.tr {
-              @column_order.each { |c| h.th(@labels[c] || c.to_s.humanize) }
-            }
-          }
-        end
-        h.tfoot
-        h.tbody {
-          @rows.each do |r|
-            h.tr {
-              @column_order.each do |col|
-                r[col.to_s] = @calculated[col].call(col, r) unless @calculated[col].nil?
-                if @each_cell[col].nil?
-                  h.td(r[col.to_s])
-                else
-                  h.td(@each_cell[col].call(col, r) || r[col.to_s])
-                end
-              end
-            }
-          end
-        }
+        render_header(h)
+        h.tfoot  
+        render_body_rows(h)
       }
     end
         
@@ -146,6 +127,39 @@ module DataDoc
       @calculated = Hash.new
       @no_headers = false
       @column_order = rows.first.keys
+    end
+    
+    #
+    # Render the <thead> of a table.
+    #
+    def render_header(h)
+      unless @no_headers 
+        h.thead {
+          h.tr {
+            @column_order.each { |c| h.th(@labels[c] || c.to_s.humanize) }
+          }
+        }
+      end
+    end
+    
+    #
+    # Render the <tbody> of a table.
+    #
+    def render_body_rows(h)
+      h.tbody {
+        @rows.each do |r|
+          h.tr {
+            @column_order.each do |col|
+              r[col.to_s] = @calculated[col].call(col, r) unless @calculated[col].nil?
+              if @each_cell[col].nil?
+                h.td(r[col.to_s])
+              else
+                h.td(@each_cell[col].call(col, r) || r[col.to_s])
+              end
+            end
+          }
+        end
+      }      
     end
         
   end
