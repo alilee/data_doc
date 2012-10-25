@@ -90,17 +90,30 @@ module DataDoc
     end
     
     #
+    # Suppress header row.
+    #
+    #   present 'select one, two from relation' do 
+    #     no_headers
+    #   end
+    #
+    def no_headers
+      @no_headers = true
+    end    
+    
+    #
     # Generate html.
     #
     def render
       h = Builder::XmlMarkup.new
       h.table {
         h.caption(@caption) unless @caption.nil?
-        h.thead {
-          h.tr {
-            @column_order.each { |c| h.th(@labels[c] || c.to_s.humanize) }
+        unless @no_headers 
+          h.thead {
+            h.tr {
+              @column_order.each { |c| h.th(@labels[c] || c.to_s.humanize) }
+            }
           }
-        }
+        end
         h.tfoot
         h.tbody {
           @rows.each do |r|
@@ -131,6 +144,7 @@ module DataDoc
       @each_cell = Hash.new
       @labels = Hash.new
       @calculated = Hash.new
+      @no_headers = false
       @column_order = rows.first.keys
     end
         

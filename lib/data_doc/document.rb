@@ -1,5 +1,6 @@
 require 'rdiscount'
 require 'erb'
+require 'tempfile'
 require 'data_doc/store.rb'
 require 'data_doc/present.rb'
 
@@ -23,6 +24,7 @@ module DataDoc
     #
     def initialize
       @format = 'html'
+      @prince_path = 'prince'
       @verbose = false
       @read_only = false
       @data_only = false
@@ -37,7 +39,7 @@ module DataDoc
     attr_accessor :format 
 
     # Available mime types that can be generated.
-    OUTPUT_TYPES = ['html']
+    OUTPUT_TYPES = ['html', 'pdf']
 
     # display verbose output during processing
     attr_accessor :verbose
@@ -75,6 +77,13 @@ module DataDoc
     def layout=(filename)
       @layout_filename = filename
     end
+
+    # 
+    # Sets path to find the pdf generator.
+    #
+    def prince=(prince_path)
+      @prince_path = prince_path
+    end
         
     #
     # :section: 2. Main function
@@ -94,7 +103,13 @@ module DataDoc
         # @store.untaint
       end
       content_html = RDiscount.new(mark_down).to_html
-      wrap_in_layout(content_html)
+      html = wrap_in_layout(content_html)
+      case @format 
+      when 'pdf'
+        html_to_pdf(html)
+      else
+        html
+      end  
     end
     
     #
@@ -264,7 +279,20 @@ module DataDoc
       end 
     end
     
-    
+    #
+    # Make PDF from HTML.
+    #
+    def html_to_pdf(html)
+      pdf_file = Tempfile.new('prince')
+      pdf_file.close
+      html_file = Tempfile.open('prince', '.') do |f|
+        f.write(html)
+        f
+      end 
+      system("#{@prince_path} -o #{pdf_file.path} #{html_file.path}")
+      File.read(pdf_file.path)
+    end
+        
   end
   
 end

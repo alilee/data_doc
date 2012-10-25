@@ -7,11 +7,19 @@ describe DataDoc::Document do
     @input = ""
     @expected_output = ""
     @expected_rows = nil
+    @expected_matches = Array.new
   end
 
   after do
     output = @doc.generate(StringIO.new(@input))
-    output.strip.must_equal @expected_output.strip
+    output.strip.must_equal @expected_output.strip unless @expected_output.nil?
+    @expected_matches.each do |m|
+      if m.kind_of?(String)
+        output.force_encoding("ASCII-8BIT").scan(m).first.must_equal(m)
+      else
+        output.must_match(m)
+      end
+    end
     unless @expected_rows.nil?
       @doc.connection.select_value("select count(1) from #{@expected_table_name}").must_equal(@expected_rows)
     end
@@ -23,10 +31,24 @@ describe DataDoc::Document do
     @expected_output = ""
   end
   
-  it "should process markdown into html" do
-    @input = '# Introduction'
-    @doc.layout = temp_file('<%= yield %>')
-    @expected_output = '<h1>Introduction</h1>'
+  describe "for a simple document" do
+    
+    before do
+      @input = '# Introduction'
+      @doc.layout = temp_file('<%= yield %>')
+    end
+    
+    it "should process markdown into html" do
+      @expected_output = '<h1>Introduction</h1>'
+    end
+  
+    it "should process markdown into pdf" do
+      @doc.format = 'pdf'
+      @doc.layout = temp_file('<%= yield %>')
+      @expected_matches.push("%PDF")
+      @expected_output = nil
+    end
+  
   end
   
   describe "layout" do

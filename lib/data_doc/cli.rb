@@ -34,7 +34,7 @@ module DataDoc
         opts.on("-c", "--connection FILENAME", 
                 "Override document connection settings with FILENAME") do |conn_filename|
           begin
-            doc.connection = YAML.load(File.read(conn_filename))
+            doc.connection = conn_filename
           rescue Exception => e
             stdout.puts "ERROR with connection file (#{e.message})"
             return 1
@@ -58,6 +58,11 @@ module DataDoc
         opts.on("-f", "--format TYPE", DataDoc::Document::OUTPUT_TYPES, "Select type of output from #{type_list} (default: #{doc.format})") do |format|
           doc.format = format
         end
+        
+        opts.on("-p", "--prince PATH", 
+                "Path for prince pdf generator") do |p|  
+          doc.prince = p
+        end        
 
         opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
           doc.verbose = v

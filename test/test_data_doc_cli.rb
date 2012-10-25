@@ -80,6 +80,14 @@ YAML
         execute_cli("--format", 'html', @filename)
       end
 
+      it "should accept a pdf format option" do
+        execute_cli("--format", 'pdf', @filename)
+      end
+
+      it "should accept a path to prince option" do
+        execute_cli("--prince", '/usr/local/bin/prince', @filename)
+      end
+
       it "should require a format for format option" do
         proc { execute_cli("--format") }.must_raise OptionParser::MissingArgument
       end

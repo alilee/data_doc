@@ -3,3 +3,4 @@ doc
 .bundle
 examples/*.db
 examples/*.html
+examples/*.pdf
