@@ -44,7 +44,7 @@ describe DataDoc::Document do
   
     it "should process markdown into pdf" do
       @expected_output = nil
-      unless system("prince &> /dev/null")
+      if system("prince &> /dev/null")
         @doc.format = 'pdf'
         @expected_matches.push("%PDF")
         @doc.layout = temp_file('<%= yield %>')
