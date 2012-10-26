@@ -17,4 +17,4 @@ end
 require 'newgem/tasks'
 Dir['tasks/**/*.rake'].each { |t| load t }
 
-task :package => :check_manifest
+task :pkg => :check_manifest
