@@ -39,7 +39,8 @@ describe DataDoc::CLI do
       end
   
       it "should require a filename for connection option" do
-        proc { execute_cli('--connection') }.must_raise OptionParser::MissingArgument
+        result = execute_cli('--connection')
+        result.must_match(/missing argument/)
       end
   
       describe "with connection settings file" do
@@ -73,7 +74,7 @@ YAML
       end
 
       it "should require a filename for output option" do
-        proc { execute_cli("--output") }.must_raise OptionParser::MissingArgument
+        execute_cli("--output").must_match(/missing argument.*--output/)
       end
 
       it "should accept an html format option" do
@@ -89,11 +90,11 @@ YAML
       end
 
       it "should require a format for format option" do
-        proc { execute_cli("--format") }.must_raise OptionParser::MissingArgument
+        execute_cli("--format").must_match(/missing argument.*--format/)
       end
 
       it "should require a valid format for format option" do
-        proc { execute_cli("--format", 'invalid') }.must_raise OptionParser::InvalidArgument
+        execute_cli("--format", 'invalid').must_match(/invalid argument.*--format/)
       end
 
       it "should accept a verbose option" do

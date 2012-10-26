@@ -17,8 +17,37 @@ module DataDoc
     def self.execute(stdout, arguments=[])
 
       doc = DataDoc::Document.new
-      filename = nil
+      doc.output_stream = stdout
+      
+      begin
+        return 1 unless parse_options(doc, stdout, arguments)
+        content = get_content(arguments.first)
+        doc.generate(content)
+      rescue RuntimeError => e
+        stdout.puts e.message
+        return 1
+      end
 
+      0      
+    end
+        
+  protected
+        
+    #
+    #
+    #
+    def self.get_content(input_filename)
+      begin
+        File.open(input_filename, "r")
+      rescue Exception => e
+        raise "ERROR opening content file (#{e.message})"
+      end
+    end
+    
+    #
+    #
+    #
+    def self.parse_options(doc, stdout, arguments)
       OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^          /,'')
           #{DataDoc::DESCRIPTION}
@@ -36,8 +65,7 @@ module DataDoc
           begin
             doc.connection = conn_filename
           rescue Exception => e
-            stdout.puts "ERROR with connection file (#{e.message})"
-            return 1
+            raise "ERROR with connection file (#{e.message})"
           end
         end
         
@@ -51,7 +79,7 @@ module DataDoc
 
         opts.on("-o", "--output FILENAME", 
                 "Put generated output in FILENAME") do |f|  
-          filename = f
+          doc.output_filename = f
         end
                 
         type_list = DataDoc::Document::OUTPUT_TYPES.join(', ')
@@ -61,7 +89,7 @@ module DataDoc
         
         opts.on("-p", "--prince PATH", 
                 "Path for prince pdf generator") do |p|  
-          doc.prince = p
+          doc.prince_path = p
         end        
 
         opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
@@ -73,44 +101,24 @@ module DataDoc
 
         opts.on_tail("-h", "--help", "Show this message") do
           stdout.puts opts
-          return 0
+          return false
         end
 
         opts.on_tail("--version", "Show version") do
           stdout.puts DataDoc::VERSION
-          return 0
+          return false
         end        
         
         opts.parse!(arguments)
         
         if arguments.length != 1 
-          stdout.puts "ERROR missing input file"
-          return 1
+          raise "ERROR missing input file"
         end
                 
       end
-
-      begin
-        content = File.open(arguments.first, "r")
-      rescue Exception => e
-        stdout.puts "ERROR opening content file (#{e.message})"
-        return 1
-      end
-            
-      result = doc.generate(content)
-      unless filename.nil?
-        begin
-          File.open(filename, 'w+') do |f|
-            f.write(result)
-          end
-        rescue Exception => e
-          stdout.puts "ERROR with output file (#{e.message})"
-          return 1
-        end
-      else
-        stdout.write(result)
-      end
-      0      
-    end
+      
+    end  
+    
   end
+  
 end

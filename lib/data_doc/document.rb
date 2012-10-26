@@ -30,6 +30,8 @@ module DataDoc
       @data_only = false
       @connection = nil
       @layout_filename = nil
+      @output_filename = nil
+      @output = STDOUT
       
       @headers = Array.new
       @stores = Hash.new
@@ -52,7 +54,7 @@ module DataDoc
     
     # ActiveRecord connection
     attr_reader :connection
-    
+        
     #
     # Do not change schema or data.
     #
@@ -68,7 +70,7 @@ module DataDoc
       settings = YAML::load_file(conn_filename)
       set_connection(settings)
     end    
-    
+        
     # 
     # Sets the layout file option.
     #
@@ -81,10 +83,26 @@ module DataDoc
     # 
     # Sets path to find the pdf generator.
     #
-    def prince=(prince_path)
-      @prince_path = prince_path
+    def prince_path=(path)
+      @prince_path = path
     end
         
+    #
+    # name of file to write output into
+    #
+    def output_filename=(filename)
+      @output_stream = nil
+      @output_filename = filename
+    end
+
+    #
+    # Stream to write output into
+    #
+    def output_stream=(s)
+      @output_filename = nil
+      @output_stream = s
+    end
+    
     #
     # :section: 2. Main function
     # 
@@ -104,12 +122,7 @@ module DataDoc
       end
       content_html = RDiscount.new(mark_down).to_html
       html = wrap_in_layout(content_html)
-      case @format 
-      when 'pdf'
-        html_to_pdf(html)
-      else
-        html
-      end  
+      write_in_format(html)
     end
     
     #
@@ -280,17 +293,23 @@ module DataDoc
     end
     
     #
-    # Make PDF from HTML.
+    # Output to file or stream, in correct format.
     #
-    def html_to_pdf(html)
-      pdf_file = Tempfile.new('prince')
-      pdf_file.close
-      html_file = Tempfile.open('prince', '.') do |f|
-        f.write(html)
-        f
-      end 
-      system("#{@prince_path} -o #{pdf_file.path} #{html_file.path}")
-      File.read(pdf_file.path)
+    def write_in_format(html)
+      html_file = if @format == 'html'
+        @output_stream || File.new(@output_filename, 'w+')
+      else
+        Tempfile.new(['prince','.html'], '.')
+      end
+
+      html_file.write(html)
+      
+      if @format == 'pdf'
+        html_file.close
+        pdf_filename = @output_filename || (Tempfile.open('prince') {|f| f.close; f.path })
+        system("#{@prince_path} -o #{pdf_filename} #{html_file.path}")
+        @output_stream.write(File.read(pdf_filename)) if @output_filename.nil?
+      end
     end
         
   end

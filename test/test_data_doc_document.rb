@@ -11,7 +11,10 @@ describe DataDoc::Document do
   end
 
   after do
-    output = @doc.generate(StringIO.new(@input))
+    output_stream = StringIO.new
+    @doc.output_stream = output_stream
+    @doc.generate(StringIO.new(@input))
+    output = output_stream.string
     output.strip.must_equal @expected_output.strip unless @expected_output.nil?
     @expected_matches.each do |m|
       if m.kind_of?(String)
