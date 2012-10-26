@@ -34,7 +34,7 @@ module DataDoc
   protected
         
     #
-    #
+    # Load the input file into memory.
     #
     def self.get_content(input_filename)
       begin
@@ -45,7 +45,7 @@ module DataDoc
     end
     
     #
-    #
+    # Parse command-line options and set up document.
     #
     def self.parse_options(doc, stdout, arguments)
       OptionParser.new do |opts|
