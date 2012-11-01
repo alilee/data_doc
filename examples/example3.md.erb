@@ -1,0 +1,53 @@
+  <%
+  set_connection adapter: 'sqlite3', database: './examples/example3.db' 
+  
+  store 'person' do
+    string 'name'
+    integer 'age'
+  end
+
+  store 'likes' do
+    string 'person'
+    string 'like'
+  end
+  
+  person name: 'David', age: 16
+  person name: 'Alister', age: 20
+  
+  likes person: 'David', like: 'Pizza'
+  likes person: 'David', like: 'Cars'
+  likes person: 'Alister', like: 'Pizza'
+  
+  %>
+  
+# Introduction
+
+Hello
+
+  <%=
+  present 'select * from person' do
+    caption 'People likes'
+    column_order 'name', 'age', 'pizza', 'cars'
+    calculated 'pizza' do |c, r|
+      query_value(
+        likes.project(likes['person'].count)
+        .where(likes['person'].eq(r['name']))
+        .where(likes['like'].matches(c))
+        )
+    end
+    calculated 'cars' do |c, r|
+      query_value(
+        "select count(1) 
+         from likes 
+         where likes.person = '#{r['name']}'
+         and likes.like = 'Cars'"
+        )
+    end
+    each_cell ['cars','pizza'] do |c, r|
+      r[c] > 0 ? "Yeah" : "Nah"
+    end
+    
+  end 
+  %>
+  
+Yeah cheers thanks very much.

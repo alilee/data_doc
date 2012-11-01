@@ -19,7 +19,7 @@ module DataDoc
     # of DataDoc::Present
     #
     def self.present(doc, arel_or_str, &blk)
-      rows = doc.connection.select_all(arel_or_str)
+      rows = ActiveRecord::Base.connection.select_all(arel_or_str)
       p = Present.new(doc, rows)
       p.instance_eval(&blk) unless blk.nil?
       p.render
@@ -72,14 +72,18 @@ module DataDoc
     #     end
     #   end
     #
-    def each_cell(col, &blk) # :yields: col, row
-      @each_cell[col] = blk
+    def each_cell(*cols, &blk) # :yields: col, row
+      cols.flatten.each do |c|
+        raise "Unknown column name: #{c}" unless @column_order.include?(c)
+        @each_cell[c] = blk
+      end
     end
     
     #
     # Define a calculated column based on a block.
     #
     #   present 'select one, two from relation' do 
+    #     column_order 'one', 'two', 'three'
     #     calculated 'three' do |col, row|
     #       row['two'] == 'true' ? 'Short' : 'Long'
     #     end
@@ -127,6 +131,13 @@ module DataDoc
       @calculated = Hash.new
       @no_headers = false
       @column_order = rows.first.keys
+    end
+    
+    #
+    # Delegate to document.
+    #
+    def method_missing(name, *args, &block)
+      @doc.send(name, *args, &block)
     end
     
     #

@@ -24,7 +24,7 @@ describe DataDoc::Document do
       end
     end
     unless @expected_rows.nil?
-      @doc.connection.select_value("select count(1) from #{@expected_table_name}").must_equal(@expected_rows)
+      ActiveRecord::Base.connection.select_value("select count(1) from #{@expected_table_name}").must_equal(@expected_rows)
     end
   end
       
@@ -153,7 +153,7 @@ EOS
       describe "when read_only" do
 
         before do
-          @doc.connection.execute("create table relation(integer id, varchar string)")
+          ActiveRecord::Base.connection.execute("create table relation(integer id, varchar string)")
           @doc.read_only = true
         end
         

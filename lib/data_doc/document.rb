@@ -51,10 +51,7 @@ module DataDoc
 
     # do not change schema; truncates tables
     attr_accessor :data_only
-    
-    # ActiveRecord connection
-    attr_reader :connection
-        
+            
     #
     # Do not change schema or data.
     #
@@ -202,7 +199,20 @@ module DataDoc
     #
     def set_connection(settings)
       ActiveRecord::Base.establish_connection(settings)
-      @connection = ActiveRecord::Base.connection
+    end
+    
+    #
+    # Fetch from store
+    #
+    def query(arel_or_sql)
+      ActiveRecord::Base.connection.select_all(arel_or_sql)
+    end
+    
+    #
+    # Fetch single value from store
+    #
+    def query_value(arel_or_sql)
+      ActiveRecord::Base.connection.select_value(arel_or_sql)
     end
     
     #

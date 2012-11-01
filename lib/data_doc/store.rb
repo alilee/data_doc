@@ -154,7 +154,7 @@ module DataDoc
     #
     def initialize(doc)
       @doc = doc
-      @connection = @doc.connection
+      @connection = ActiveRecord::Base.connection
     end
     
             

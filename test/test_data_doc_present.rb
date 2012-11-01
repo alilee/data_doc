@@ -72,7 +72,41 @@ describe DataDoc::Present do
         @result.wont_match(/<th>/)
       end
     end
-        
+    
+    describe "with reformatting" do
+      
+      it "should accept an array of field names" do
+        @result = DataDoc::Present.present(@mock_doc, "select * from relation") do
+          each_cell ['one', 'two'] do |c,r|
+            "reformatted #{c}"
+          end
+        end  
+        @result.must_match(/reformatted one/)
+        @result.must_match(/reformatted two/)
+      end
+      
+      it "should allow reformatting reuse" do
+        @result = DataDoc::Present.present(@mock_doc, "select * from relation") do
+          each_cell 'one', 'two' do |c,r|
+            "reformatted #{c}"
+          end
+        end  
+        @result.must_match(/reformatted one/)
+        @result.must_match(/reformatted two/)
+      end
+      
+      it "should validate the field name" do
+        proc { 
+          DataDoc::Present.present(@mock_doc, "select * from relation") do
+            each_cell 'four' do |c,r|
+              "reformatted #{c}"
+            end
+          end
+        }.must_raise(RuntimeError)
+      end
+            
+    end
+            
   end
   
 end
