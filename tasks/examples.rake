@@ -1,5 +1,3 @@
-# hello
-
 rule '.html' => '.md.erb' do |t|
   sh "bin/data_doc -o #{t.name} #{t.source}"
 end
