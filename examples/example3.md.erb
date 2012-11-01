@@ -37,8 +37,7 @@ Hello
     end
     calculated 'cars' do |c, r|
       query_value(
-        "select count(1) 
-         from likes 
+        "select count(1) from likes 
          where likes.person = '#{r['name']}'
          and likes.like = 'Cars'"
         )
