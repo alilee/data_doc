@@ -1,5 +1,5 @@
-require_relative 'test_helper.rb'
-require_relative '../lib/data_doc/cli'
+require_relative '../test_helper.rb'
+require_relative '../../lib/data_doc/cli'
 require 'tempfile'
 require 'set'
 
